@@ -1,4 +1,4 @@
-app = "mastodon-example"
+app = "farbun-social"
 
 kill_signal = "SIGINT"
 kill_timeout = 5
@@ -8,7 +8,7 @@ kill_timeout = 5
 #   release_command = "bin/rails db:migrate"
 
 [env]
-  LOCAL_DOMAIN = "mastodon-example.fly.dev"
+  LOCAL_DOMAIN = "farbun.social"
   WEB_CONCURRENCY = "0" # exactly 1 Puma process
   OVERMIND_FORMATION = "sidekiq=1" # exactly 1 sidekiq process
   MALLOC_ARENA_MAX = "2"
@@ -16,14 +16,14 @@ kill_timeout = 5
   RAILS_ENV = "production"
   RAILS_LOG_TO_STDOUT = "enabled"
   RAILS_SERVE_STATIC_FILES = "false"
-  REDIS_HOST = "mastodon-example-redis.internal"
+  REDIS_HOST = "farbun-social-redis.internal"
   REDIS_PORT = "6379"
-  ## Storage on S3 also requires secrets named AWS_ACCESS_KEY_ID and 
+  ## Storage on S3 also requires secrets named AWS_ACCESS_KEY_ID and
   ## AWS_SECRET_ACCESS_KEY. If you use this, remove [mounts] below.
   # S3_ENABLED=true
-  # S3_BUCKET=mastodon-example-bucket
+  # S3_BUCKET=farbun-social-bucket
   ## If you point to Fly here, uncomment the proxy in Caddyfile
-  # S3_ALIAS_HOST=mastodon-example.fly.dev
+  # S3_ALIAS_HOST=farbun-social.fly.dev
   ## Sending email via SMTP also requires secrets
   ## named SMTP_LOGIN and SMTP_PASSWORD
   # SMTP_SERVER = "smtp.postmarkapp.com"

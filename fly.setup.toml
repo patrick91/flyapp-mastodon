@@ -1,4 +1,4 @@
-app = "mastodon-example"
+app = "farbun-social"
 
 [deploy]
   release_command = "bundle exec rails db:schema:load"

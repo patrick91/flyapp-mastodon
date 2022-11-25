@@ -13,7 +13,7 @@ While following this guide, you may find it helpful to also view the [Mastodon d
 Fork this repo and clone a copy of it. Choose a name for your app that isn't already taken on Fly, and run the script `bin/name YOURNAME`. Follow this readme from inside your repo, after you have run the script, so that all of the steps will be updated for the name of your Fly app.
 
 ```
-$ fly apps create mastodon-example
+$ fly apps create farbun-social
 $ fly scale memory 1024 # Rails + Sidekiq needs more than 512
 ```
 
@@ -31,8 +31,8 @@ $ docker run --rm -e OTP_SECRET=$OTP_SECRET -e SECRET_KEY_BASE=$SECRET_KEY_BASE 
 Redis is used to store the home/list feeds, along with the sidekiq queue information. The feeds can be regenerated using `tootctl`, so persistence is [not strictly necessary](https://docs.joinmastodon.org/admin/backups/#failure).
 
 ```
-$ fly apps create mastodon-example-redis
-$ bin/fly-redis volumes create --region sjc --size 1 mastodon_redis
+$ fly apps create farbun-social-redis
+$ bin/fly-redis volumes create --region lhr --size 1 mastodon_redis
 $ bin/fly-redis deploy
 ```
 
@@ -45,7 +45,7 @@ Create that volume below, or remove the `[mounts]` section and uncomment `[env] 
 ##### Option 1: Local volume
 
 ```
-$ fly volumes create --region sjc mastodon_uploads
+$ fly volumes create --region lhr mastodon_uploads
 ```
 
 ##### Option 2: S3, etc
@@ -62,8 +62,8 @@ To serve cloud-stored images directly from your domain, set `S3_ALIAS_HOST` in `
 #### Postgres database
 
 ```
-$ fly pg create --region sjc --name mastodon-example-db
-$ fly pg attach mastodon-example-db
+$ fly pg create --region lhr --name farbun-social-db
+$ fly pg attach farbun-social-db
 $ fly deploy -c fly.setup.toml # run `rails db:schema:load`, may take 2-3 minutes
 ```
 
@@ -84,8 +84,8 @@ $ fly secrets set SMTP_LOGIN=<public token> SMTP_PASSWORD=<secret token>
     If your DNS host supports ALIAS records:
 
     ```
-    @   ALIAS mastodon-example.fly.dev
-    www CNAME mastodon-example.fly.dev
+    @   ALIAS farbun-social.fly.dev
+    www CNAME farbun-social.fly.dev
     ```
 
     If your DNS host only allows A records, use the IP. For example, if your IP was `3.3.3.3`:
@@ -125,7 +125,7 @@ Enjoy your server.
 
 If you still haven't gotten enough, here are some notes on how to operate your instance after it's running.
 
-Useful resources for operating and debugging a running instance include `fly logs`, `fly scale show`, `fly ssh console`, the Metrics section of `fly dashboard`, and the Sidekiq dashboard at https://mastodon-example.fly.dev/sidekiq (you have to be logged in to Mastodon as an admin user to see it).
+Useful resources for operating and debugging a running instance include `fly logs`, `fly scale show`, `fly ssh console`, the Metrics section of `fly dashboard`, and the Sidekiq dashboard at https://farbun-social.fly.dev/sidekiq (you have to be logged in to Mastodon as an admin user to see it).
 
 If your instance is getting slow or falling over, you may find [Scaling Mastodon in the Face of an Exodus](https://nora.codes/post/scaling-mastodon-in-the-face-of-an-exodus/) helpful.
 
@@ -138,7 +138,7 @@ If there are migrations that need to be run, make sure that the release command 
 If there are migrations that must be run before deploying to avoid downtime, you can run the pre-deploy migrations using a second app. By scaling this app to a VM count of zero, it won't add to our bill, but it will let us run the pre-deploy migrations as a release command before the web processes get the new code.
 
 ```
-$ fly apps create mastodon-example-predeploy
+$ fly apps create farbun-social-predeploy
 $ bin/fly-predeploy secrets set OTP_SECRET=placeholder SECRET_KEY_BASE=placeholder
 $ bin/fly-predeploy secrets set $(fly ssh console -C env | grep DATABASE_URL)
 $ bin/fly-predeploy scale memory 1024

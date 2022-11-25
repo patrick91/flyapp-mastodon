@@ -1,4 +1,4 @@
-app = "mastodon-example-redis"
+app = "farbun-social-redis"
 
 [build]
   dockerfile = "Dockerfile.redis"
