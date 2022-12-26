@@ -39,22 +39,24 @@ kill_timeout = 5
 ## If you uncomment this to scale up to more VMs,
 ##   - Remove the entire [mounts] section above
 ##   - Remove the OVERMIND_FORMATION env line above
+##   - Uncomment `processes = ["rails"]` below in [[services]]
 # [processes]
 #   # If you need more web server workers, scale up this group
-#   # by running `fly scale count N --group rails`
+#   # by running `fly scale count rails=N
 #   rails = "./overmind start -x sidekiq"
 #   # If you need to run more sidekiq workers, scale up this group
 #   # by running `fly scale count N --group sidekiq`
-#   sidekiq = "bash -c 'bundle exec sidekiq -c $MAX_THREADS -q default,2 -q pull,2 mailer,1 push,1'"
+#   sidekiq = "bash -c 'bundle exec sidekiq -c $MAX_THREADS -q default,8 -q push,6 -q ingress,4 -q mailers,2 -q pull'"
 #   # The schedule queue can only ever have one worker process at a time
 #   # by running fly scale count 1 --group schedule
-#   schedule = "bash -c 'bundle exec sidekiq -c $MAX_THREADS -q schedule,2 mailer,1 push,1'"
+#   schedule = "bash -c 'bundle exec sidekiq -c $MAX_THREADS'"
 
 [[statics]]
   guest_path = "/opt/mastodon/public"
   url_prefix = "/"
 
 [[services]]
+  # processes = ["rails"]
   internal_port = 8080
   protocol = "tcp"
 
